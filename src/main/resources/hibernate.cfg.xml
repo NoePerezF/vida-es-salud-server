@@ -1,0 +1,27 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL92Dialect</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.username">kcuevrjwwiydvm</property>
+        <property name="hibernate.connection.password">27463986445fea41614dc1f67424a85ea26bfe3844790f8651c1f3996d0da5d6</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://ec2-3-230-122-20.compute-1.amazonaws.com/de4t6648jutld4</property>
+
+
+
+        <property name="connection_pool_size">1</property>
+
+        <property name="hbm2ddl.auto">create</property>
+
+        <property name="show_sql">true</property>
+
+        <property name="hbm2ddl.auto">create</property>
+
+       <mapping class="com.vidaEsSalud.domain"/>
+
+    </session-factory>
+</hibernate-configuration>
+
