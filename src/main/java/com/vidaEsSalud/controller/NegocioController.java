@@ -24,11 +24,17 @@ public class NegocioController {
         return (mapper.writeValueAsString(repo.findAll()));
     }
     
+    @PostMapping("/api/negocio/login")
+    public String login(@RequestBody Negocio negocio) throws JsonProcessingException{
+        Negocio aux = repo.findByUsuario(negocio.getUsuario());
+        if(aux != null && aux.getContrasena().compareTo(negocio.getContrasena()) == 0)
+            return(mapper.writeValueAsString(aux));
+        return("Error en usuario o contrasena");
+    }
+    
     @PostMapping("/api/negocio/addnegocio")
     public String addNegocio(@RequestBody Negocio negocio) throws JsonProcessingException{
-        String pass = Hashing.sha256().hashString(negocio.getContrasena(), StandardCharsets.UTF_8)
-                .toString();
-        negocio.setContrasena(pass);
+        
         return(mapper.writeValueAsString(repo.save(negocio)));   
     }
     @PostMapping("/api/negocio/updatenegocio")

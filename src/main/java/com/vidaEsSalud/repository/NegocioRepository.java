@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NegocioRepository extends JpaRepository<Negocio, Integer>{
-    
+    Negocio findByUsuario(String usuario);
 }
