@@ -29,9 +29,8 @@ public class ClienteController {
     @PostMapping("/api/cliente/login")
     public String login(@RequestBody Cliente cliente) throws JsonProcessingException{
         Cliente aux = repo.findByUsuario(cliente.getUsuario());
-        String pass = Hashing.sha256().hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
-                .toString();
-        if(aux.getContrasena().compareTo(pass) == 0)
+        
+        if(aux.getContrasena().compareTo(cliente.getContrasena()) == 0)
             return(mapper.writeValueAsString(aux));
         return("Error en usuario o contrasena");
     }
