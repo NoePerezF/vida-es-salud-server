@@ -41,4 +41,6 @@ public class Negocio implements Serializable{
     private List<Producto> productos;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, mappedBy = "negocio")
     private List<Servicio> servicios;
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "negocio")
+    private List<Citas> citas;
 }

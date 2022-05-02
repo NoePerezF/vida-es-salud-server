@@ -1,8 +1,10 @@
 
 package com.vidaEsSalud.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,11 +28,13 @@ public class Citas implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int Id;
-    private Date fecha;
-    @ManyToOne( cascade = CascadeType.ALL)
+    private Timestamp fecha;
+    @ManyToOne
     @JoinColumn(name = "cliente")
+    @JsonIgnore
     private Cliente cliente;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "negocio")
+    @ManyToOne
+    @JoinColumn(name = "negocio" )
+    @JsonIgnore
     private Negocio negocio;
 }
