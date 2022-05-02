@@ -1,6 +1,7 @@
 
 package com.vidaEsSalud.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,8 +27,9 @@ public class Foto_producto implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String url;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "producto")
+    @JsonIgnore
     private Producto producto;
     
 }

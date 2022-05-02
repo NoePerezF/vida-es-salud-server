@@ -1,6 +1,7 @@
 
 package com.vidaEsSalud.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,7 +27,8 @@ public class Telefono_negocio implements Serializable{
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     private String telefono;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "negocio")
+    @JsonIgnore
     private Negocio negocio;
 }
