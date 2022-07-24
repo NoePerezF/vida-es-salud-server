@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,7 +70,7 @@ public class NegocioController {
     }
     
     @GetMapping("/api/negocio/getcitaspordia")
-    public String getCitasPorDia(@RequestParam int id,@RequestParam Timestamp dia) throws JsonProcessingException{
+    public String getCitasPorDia(@RequestParam int id,@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Timestamp dia) throws JsonProcessingException{
         Negocio negocio = repo.findById(id).get();
         List<Citas> citasAll = negocio.getCitas();
         if(citasAll.isEmpty()){
