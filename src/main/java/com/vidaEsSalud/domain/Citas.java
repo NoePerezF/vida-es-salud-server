@@ -46,4 +46,9 @@ public class Citas implements Serializable{
     @Nullable
     private String nombre;
     
+    @ManyToOne
+    @JoinColumn(name = "estatus")
+    @JsonIgnore
+    private EstatusCita estatus;
+    
 }
