@@ -8,6 +8,7 @@ import com.vidaEsSalud.domain.Citas;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.repository.NegocioRepository;
 import java.nio.charset.StandardCharsets;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class NegocioController {
     }
     
     @GetMapping("/api/negocio/getcitaspordia")
-    public String getCitasPorDia(@RequestParam int id,@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Timestamp dia) throws JsonProcessingException{
+    public String getCitasPorDia(@RequestParam int id,@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date dia) throws JsonProcessingException{
         Negocio negocio = repo.findById(id).get();
         List<Citas> citasAll = negocio.getCitas();
         if(citasAll.isEmpty()){
@@ -78,7 +79,7 @@ public class NegocioController {
         }
         List<Citas> citasDia = new ArrayList<>();
         for(Citas cita : citasAll){
-            if(cita.getFecha().toLocalDateTime().getDayOfYear() == dia.toLocalDateTime().getDayOfYear()){
+            if(cita.getFecha().toLocalDateTime().getDayOfYear() == (new Timestamp(dia.getTime())).toLocalDateTime().getDayOfYear()){
                citasDia.add(cita);
             }
         }
