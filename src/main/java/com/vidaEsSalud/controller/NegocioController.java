@@ -8,6 +8,9 @@ import com.vidaEsSalud.domain.Citas;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.repository.NegocioRepository;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,5 +66,21 @@ public class NegocioController {
     public String getCitas(@RequestParam int id) throws JsonProcessingException{
         Negocio negocio = repo.findById(id).get();
         return(mapper.writeValueAsString(negocio.getCitas()));
+    }
+    
+    @GetMapping("/api/negocio/getcitaspordia")
+    public String getCitasPorDia(@RequestParam int id,@RequestParam Timestamp dia) throws JsonProcessingException{
+        Negocio negocio = repo.findById(id).get();
+        List<Citas> citasAll = negocio.getCitas();
+        if(citasAll.isEmpty()){
+            return(mapper.writeValueAsString(citasAll));
+        }
+        List<Citas> citasDia = new ArrayList<>();
+        for(Citas cita : citasAll){
+            if(cita.getFecha().toLocalDateTime().getDayOfYear() == dia.toLocalDateTime().getDayOfYear()){
+               citasDia.add(cita);
+            }
+        }
+        return(mapper.writeValueAsString(citasDia));
     }
 }
