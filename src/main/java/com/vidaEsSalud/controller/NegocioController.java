@@ -3,14 +3,12 @@ package com.vidaEsSalud.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.hash.Hashing;
 import com.vidaEsSalud.domain.Citas;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.repository.NegocioRepository;
-import java.nio.charset.StandardCharsets;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
