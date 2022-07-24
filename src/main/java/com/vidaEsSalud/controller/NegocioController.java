@@ -53,6 +53,7 @@ public class NegocioController {
     public String addCitaDesdeNegocio(@RequestBody Negocio negocio) throws JsonProcessingException{
         Citas cita = negocio.getCitas().get(0);
         negocio = repo.findById(negocio.getId()).get();
+        cita.getNegocio().setId(negocio.getId());
         negocio.getCitas().add(cita);
         return(mapper.writeValueAsString(repo.save(negocio)));
     }

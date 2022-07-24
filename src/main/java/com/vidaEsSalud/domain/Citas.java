@@ -35,6 +35,7 @@ public class Citas implements Serializable{
     @ManyToOne
     @JoinColumn(name = "cliente")
     @JsonIgnore
+    @Nullable
     private Cliente cliente;
     
     @ManyToOne
