@@ -32,8 +32,6 @@ public class NegocioController {
     @PostMapping("/api/negocio/login")
     public String login(@RequestBody Negocio negocio) throws JsonProcessingException{
         Negocio aux = repo.findByUsuario(negocio.getUsuario());
-        System.out.println(aux.getContrasena());
-        System.out.println(negocio.getContrasena());
         if(aux != null && aux.getContrasena().compareTo(negocio.getContrasena()) == 0)
             return(mapper.writeValueAsString(aux));
         return("Error en usuario o contrasena");
@@ -80,6 +78,21 @@ public class NegocioController {
         List<Citas> citasDia = new ArrayList<>();
         for(Citas cita : citasAll){
             if(cita.getFecha().toLocalDateTime().getDayOfYear() == (new Timestamp(dia.getTime())).toLocalDateTime().getDayOfYear()){
+               citasDia.add(cita);
+            }
+        }
+        return(mapper.writeValueAsString(citasDia));
+    }
+    @GetMapping("/api/negocio/getcitaspormes")
+    public String getCitasPorMes(@RequestParam int id,@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date dia) throws JsonProcessingException{
+        Negocio negocio = repo.findById(id).get();
+        List<Citas> citasAll = negocio.getCitas();
+        if(citasAll.isEmpty()){
+            return(mapper.writeValueAsString(citasAll));
+        }
+        List<Citas> citasDia = new ArrayList<>();
+        for(Citas cita : citasAll){
+            if(cita.getFecha().toLocalDateTime().getMonthValue() == (new Timestamp(dia.getTime())).toLocalDateTime().getMonthValue()){
                citasDia.add(cita);
             }
         }
