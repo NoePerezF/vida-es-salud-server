@@ -32,6 +32,8 @@ public class NegocioController {
     @PostMapping("/api/negocio/login")
     public String login(@RequestBody Negocio negocio) throws JsonProcessingException{
         Negocio aux = repo.findByUsuario(negocio.getUsuario());
+        System.out.println(aux.getContrasena());
+        System.out.println(negocio.getContrasena());
         if(aux != null && aux.getContrasena().compareTo(negocio.getContrasena()) == 0)
             return(mapper.writeValueAsString(aux));
         return("Error en usuario o contrasena");
