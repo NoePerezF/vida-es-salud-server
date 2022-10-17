@@ -9,6 +9,9 @@ import com.vidaEsSalud.repository.NegocioRepository;
 import com.vidaEsSalud.repository.ServicioRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +51,10 @@ public class ServicioController {
         servicio.setNegocio(aux.getNegocio());
         return(mapper.writeValueAsString(repoServicio.save(servicio)));
         
+    }
+    
+    @GetMapping("/api/servicios/getallservicios")
+    public ResponseEntity<List<Servicio>> getAllServicios(){
+        return new ResponseEntity<>(repoServicio.findAll(),HttpStatus.OK);
     }
 }

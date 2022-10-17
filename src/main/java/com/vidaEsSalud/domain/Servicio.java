@@ -37,5 +37,6 @@ public class Servicio implements Serializable{
     private Negocio negocio;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval=true, mappedBy = "servicio")
     private List<Foto_servicio> fotos;
+    private String horario;
     
 }

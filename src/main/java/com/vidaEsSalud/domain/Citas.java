@@ -43,6 +43,11 @@ public class Citas implements Serializable{
     @JsonIgnore
     private Negocio negocio;
     
+    @ManyToOne
+    @JoinColumn(name = "servicio" )
+    @JsonIgnore
+    private Servicio servicio;
+    
     @Nullable
     private String nombre;
     
