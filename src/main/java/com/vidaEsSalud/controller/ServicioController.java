@@ -61,6 +61,8 @@ public class ServicioController {
     
      @PostMapping("/api/servicios/addcita")
     public String addCitaDesdeNegocio(@RequestBody Servicio servicio) throws JsonProcessingException{
+        System.out.println(servicio.getId());
+        System.out.println(servicio.getCitas().size());
         Citas cita = servicio.getCitas().get(0);
         servicio = repoServicio.findById(servicio.getId()).get();
         cita.setNegocio(servicio.getNegocio());
