@@ -66,7 +66,7 @@ public class ServicioController {
         Citas cita = servicio.getCitas().get(0);
         servicio = repoServicio.findById(servicio.getId()).get();
         cita.setNegocio(servicio.getNegocio());
-        cita.getServicio().setId(servicio.getId());
+        cita.setServicio(servicio);
         servicio.getCitas().add(cita);
         return(mapper.writeValueAsString(repoServicio.save(servicio)));
     }
