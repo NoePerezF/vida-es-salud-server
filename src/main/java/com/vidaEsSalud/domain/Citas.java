@@ -45,7 +45,6 @@ public class Citas implements Serializable{
     
     @ManyToOne
     @JoinColumn(name = "servicio" )
-    @JsonIgnore
     private Servicio servicio;
     
     @Nullable
