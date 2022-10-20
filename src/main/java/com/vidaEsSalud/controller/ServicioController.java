@@ -3,6 +3,7 @@ package com.vidaEsSalud.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vidaEsSalud.domain.Citas;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.domain.Servicio;
 import com.vidaEsSalud.repository.NegocioRepository;
@@ -56,5 +57,15 @@ public class ServicioController {
     @GetMapping("/api/servicios/getallservicios")
     public ResponseEntity<List<Servicio>> getAllServicios(){
         return new ResponseEntity<>(repoServicio.findAll(),HttpStatus.OK);
+    }
+    
+     @PostMapping("/api/servicios/addcita")
+    public String addCitaDesdeNegocio(@RequestBody Servicio servicio) throws JsonProcessingException{
+        Citas cita = servicio.getCitas().get(0);
+        servicio = repoServicio.findById(servicio.getId()).get();
+        cita.setNegocio(servicio.getNegocio());
+        cita.getServicio().setId(servicio.getId());
+        servicio.getCitas().add(cita);
+        return(mapper.writeValueAsString(repoServicio.save(servicio)));
     }
 }
