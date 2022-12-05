@@ -29,14 +29,20 @@ public class ClienteController {
     @PostMapping("/api/cliente/login")
     public String login(@RequestBody Cliente cliente) throws JsonProcessingException{
         Cliente aux = repo.findByUsuario(cliente.getUsuario()); 
-        if(aux != null && aux.getContrasena().compareTo(cliente.getContrasena()) == 0)
+        String sha256hex = Hashing.sha256()
+                            .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
+                            .toString();
+        if(aux != null && aux.getContrasena().compareTo(sha256hex) == 0)
             return(mapper.writeValueAsString(aux));
         return("Error en usuario o contrasena");
     }
     
     @PostMapping("/api/cliente/addcliente")
     public String addCliente(@RequestBody Cliente cliente) throws JsonProcessingException{
-        
+        String sha256hex = Hashing.sha256()
+                            .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
+                            .toString();
+        cliente.setContrasena(sha256hex);
         return(mapper.writeValueAsString(repo.save(cliente)));
     }
     
