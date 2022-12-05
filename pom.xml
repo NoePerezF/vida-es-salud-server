@@ -18,6 +18,7 @@
 
 
 	<properties>
+		<spring-boot.version>2.6.5</spring-boot.version>
 		<java.version>11</java.version>
 		<start-class>com.cidaEsSalud.VidaEsSaludApplication</start-class>
 		<tomcat.directory>/var/lib/tomcat9/webapps/</tomcat.directory>
