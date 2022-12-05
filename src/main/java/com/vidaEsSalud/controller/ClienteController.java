@@ -8,12 +8,16 @@ import com.vidaEsSalud.domain.Cliente;
 import com.vidaEsSalud.repository.ClienteRepository;
 import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin("*")
 public class ClienteController {
     
     @Autowired
@@ -27,23 +31,23 @@ public class ClienteController {
     }
     
     @PostMapping("/api/cliente/login")
-    public String login(@RequestBody Cliente cliente) throws JsonProcessingException{
+    public ResponseEntity<?> login(@RequestBody Cliente cliente) throws JsonProcessingException{
         Cliente aux = repo.findByUsuario(cliente.getUsuario()); 
         String sha256hex = Hashing.sha256()
                             .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
                             .toString();
         if(aux != null && aux.getContrasena().compareTo(sha256hex) == 0)
-            return(mapper.writeValueAsString(aux));
-        return("Error en usuario o contrasena");
+            return new ResponseEntity<Cliente>(aux, HttpStatus.OK);
+        return new ResponseEntity<>("Error en usuario o contrasena",HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
     @PostMapping("/api/cliente/addcliente")
-    public String addCliente(@RequestBody Cliente cliente) throws JsonProcessingException{
+    public ResponseEntity<?> addCliente(@RequestBody Cliente cliente) throws JsonProcessingException{
         String sha256hex = Hashing.sha256()
                             .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
                             .toString();
         cliente.setContrasena(sha256hex);
-        return(mapper.writeValueAsString(repo.save(cliente)));
+        return new ResponseEntity<Cliente>(repo.save(cliente), HttpStatus.OK);
     }
     
     @PostMapping("/api/cliente/updatecliente")
