@@ -7,6 +7,9 @@ import com.vidaEsSalud.domain.Citas;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.repository.NegocioRepository;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -99,5 +102,12 @@ public class NegocioController {
             }
         }
         return(mapper.writeValueAsString(citasDia));
+    }
+
+    @GetMapping("/api/negocio/gerhora")
+    public String getHora() {
+        LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("UTC-6"));
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        return(dateTime.format(df));
     }
 }
