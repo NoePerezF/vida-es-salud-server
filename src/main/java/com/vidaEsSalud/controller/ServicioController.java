@@ -4,11 +4,16 @@ package com.vidaEsSalud.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vidaEsSalud.domain.Citas;
+import com.vidaEsSalud.domain.Cliente;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.domain.Servicio;
+import com.vidaEsSalud.repository.CitasRepository;
+import com.vidaEsSalud.repository.ClienteRepository;
 import com.vidaEsSalud.repository.NegocioRepository;
 import com.vidaEsSalud.repository.ServicioRepository;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +31,12 @@ public class ServicioController {
     
     @Autowired
     private ServicioRepository repoServicio;
+
+    @Autowired
+    private ClienteRepository repoCliente;
+
+    @Autowired
+    private CitasRepository repoCitas;
     
     private ObjectMapper mapper = new ObjectMapper();
     
@@ -71,5 +82,15 @@ public class ServicioController {
         cita.setServicio(servicio);
         servicio.getCitas().add(cita);
         return(mapper.writeValueAsString(repoServicio.save(servicio)));
+    }
+
+    @PostMapping("/api/servicios/addcitacliente")
+    public String addCitaCliente(@RequestBody Citas cita) throws JsonProcessingException {
+        Optional<Servicio> opServicio =  repoServicio.findById(cita.getServicio().getId());
+        Optional<Cliente> opCliente = repoCliente.findById(cita.getCliente().getId());
+        if(opServicio.isEmpty() || opCliente.isEmpty()) {
+            return("Error no existe el servicio o el cliente");
+        }
+        return(mapper.writeValueAsString(repoCitas.save(cita)));
     }
 }
