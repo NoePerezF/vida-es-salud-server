@@ -91,6 +91,7 @@ public class ServicioController {
         if(opServicio.isEmpty() || opCliente.isEmpty()) {
             return("Error no existe el servicio o el cliente");
         }
+        cita.setNegocio(opServicio.get().getNegocio());
         return(mapper.writeValueAsString(repoCitas.save(cita)));
     }
 }
