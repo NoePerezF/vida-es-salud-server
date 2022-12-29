@@ -77,11 +77,21 @@ public class ServicioController {
         System.out.println(servicio.getId());
         System.out.println(servicio.getCitas().size());
         Citas cita = servicio.getCitas().get(0);
+
         servicio = repoServicio.findById(servicio.getId()).get();
+        if(cita.getCliente() != null){
+            Optional<Cliente> clienteOp = repoCliente.findById(cita.getCliente().getId());
+            if(clienteOp.isEmpty()){
+                cita.setCliente(null);
+            }else{
+                cita.setCliente(clienteOp.get());
+            }
+        }
+            
         cita.setNegocio(servicio.getNegocio());
         cita.setServicio(servicio);
         servicio.getCitas().add(cita);
-        return(mapper.writeValueAsString(repoServicio.save(servicio)));
+        return(mapper.writeValueAsString(repoCitas.save(cita)));
     }
 
     @PostMapping("/api/servicios/addcitacliente")
