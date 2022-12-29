@@ -2,6 +2,8 @@
 package com.vidaEsSalud.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -34,7 +36,7 @@ public class Citas implements Serializable{
     
     @ManyToOne
     @JoinColumn(name = "cliente")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Nullable
     private Cliente cliente;
     
