@@ -6,7 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import com.vidaEsSalud.domain.Cliente;
 import com.vidaEsSalud.repository.ClienteRepository;
+import com.vidaEsSalud.repository.ParametroRepository;
+import com.vidaEsSalud.service.MailServie;
+
 import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +27,12 @@ public class ClienteController {
     
     @Autowired
     private ClienteRepository repo;
+
+    @Autowired
+    private MailServie mailServie;
+
+    @Autowired
+    private ParametroRepository parametroRepository;
     
     private ObjectMapper mapper = new ObjectMapper();
     
@@ -32,7 +43,7 @@ public class ClienteController {
     
     @PostMapping("/api/cliente/login")
     public ResponseEntity<?> login(@RequestBody Cliente cliente) throws JsonProcessingException{
-        Cliente aux = repo.findByUsuario(cliente.getUsuario()); 
+        Cliente aux = repo.findByUsuarioAndIsVerificadoTrue(cliente.getUsuario()); 
         String sha256hex = Hashing.sha256()
                             .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
                             .toString();
@@ -47,6 +58,13 @@ public class ClienteController {
                             .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
                             .toString();
         cliente.setContrasena(sha256hex);
+        cliente.setVerificado(false);
+        String verificacion = RandomStringUtils.randomAlphanumeric(64);
+        while(repo.findByVerificacion(verificacion).isPresent()){
+            verificacion = RandomStringUtils.randomAlphanumeric(64);
+        }
+        cliente.setVerificacion(verificacion);
+        mailServie.sendEmail("VES", cliente.getEmail(),"Verificacion email", "Enlace de verificacion: " + parametroRepository.findByClave("DOMAIN_NAME").getValor()+"/verificacion/"+verificacion, null);
         return new ResponseEntity<Cliente>(repo.save(cliente), HttpStatus.OK);
     }
     

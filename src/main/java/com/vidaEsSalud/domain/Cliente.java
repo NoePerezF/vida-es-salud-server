@@ -4,6 +4,7 @@ package com.vidaEsSalud.domain;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,4 +35,8 @@ public class Cliente implements Serializable{
     private String telefono;
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "cliente")
     private List<Citas> citas;
+    @Column(nullable = true)
+    private boolean isVerificado;
+    @Column(nullable = true)
+    private String verificacion;
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,7 @@ public class NegocioController {
     
     @PostMapping("/api/negocio/login")
     public String login(@RequestBody Negocio negocio) throws JsonProcessingException{
-        Negocio aux = repo.findByUsuario(negocio.getUsuario());
+        Negocio aux = repo.findByUsuarioAndIsVerificadoTrue(negocio.getUsuario());
         if(aux != null && aux.getContrasena().compareTo(negocio.getContrasena()) == 0)
             return(mapper.writeValueAsString(aux));
         return("Error en usuario o contrasena");
@@ -109,5 +110,10 @@ public class NegocioController {
         LocalDateTime dateTime = LocalDateTime.now(ZoneId.of("UTC-6"));
         DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         return(dateTime.format(df));
+    }
+
+    @GetMapping("/api/negocio/getnegocio/{id}")
+    public String getNegocio(@PathVariable("id") int id) throws JsonProcessingException{
+        return (mapper.writeValueAsString(repo.findById(id)));
     }
 }
