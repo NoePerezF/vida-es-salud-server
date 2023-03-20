@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface NegocioRepository extends JpaRepository<Negocio, Integer>{
     Negocio findByUsuarioAndIsVerificadoTrue(String usuario);
     Optional<Negocio> findByVerificacion(String verificacion);
+    Optional<Negocio> findByIdAndIsVerificadoTrue(int id);
 }

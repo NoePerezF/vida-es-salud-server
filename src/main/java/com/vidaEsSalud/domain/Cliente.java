@@ -36,7 +36,7 @@ public class Cliente implements Serializable{
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "cliente")
     private List<Citas> citas;
     @Column(nullable = true)
-    private boolean isVerificado;
+    private Boolean isVerificado;
     @Column(nullable = true)
     private String verificacion;
 }

@@ -3,6 +3,8 @@ package com.vidaEsSalud.domain;
 
 import java.io.Serializable;
 import java.util.List;
+
+import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,7 +48,8 @@ public class Negocio implements Serializable{
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true,mappedBy = "negocio")
     private List<Telefono_negocio> telefonos;
     @Column(nullable = true)
-    private boolean isVerificado;
+    @Nullable
+    private Boolean isVerificado;
     @Column
     private String verificacion;
 }

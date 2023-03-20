@@ -13,8 +13,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -113,7 +117,11 @@ public class NegocioController {
     }
 
     @GetMapping("/api/negocio/getnegocio/{id}")
-    public String getNegocio(@PathVariable("id") int id) throws JsonProcessingException{
-        return (mapper.writeValueAsString(repo.findById(id)));
+    public ResponseEntity<?> getNegocio(@PathVariable("id") int id) throws JsonProcessingException{
+        Optional<Negocio> negocio = repo.findByIdAndIsVerificadoTrue(id);
+        if(negocio.isPresent())
+            return (new ResponseEntity<>(negocio.get(),HttpStatus.OK)); 
+        return (new ResponseEntity<>("{mensaje: 'No se encontro el negocio'}",HttpStatus.NOT_FOUND));
+  
     }
 }

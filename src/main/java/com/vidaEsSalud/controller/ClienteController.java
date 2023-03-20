@@ -58,7 +58,7 @@ public class ClienteController {
                             .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
                             .toString();
         cliente.setContrasena(sha256hex);
-        cliente.setVerificado(false);
+        cliente.setIsVerificado(true);
         String verificacion = RandomStringUtils.randomAlphanumeric(64);
         while(repo.findByVerificacion(verificacion).isPresent()){
             verificacion = RandomStringUtils.randomAlphanumeric(64);
