@@ -27,7 +27,7 @@ import lombok.Setter;
 public class Servicio implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
     private String nombre;
     private String descripcion;
     private double precio;
