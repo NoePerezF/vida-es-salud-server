@@ -3,9 +3,12 @@ package com.vidaEsSalud.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.Hashing;
 import com.vidaEsSalud.domain.Citas;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.repository.NegocioRepository;
+
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -42,7 +45,10 @@ public class NegocioController {
     @PostMapping("/api/negocio/login")
     public ResponseEntity<?> login(@RequestBody Negocio negocio) throws JsonProcessingException{
         Negocio aux = repo.findByUsuarioAndIsVerificadoTrue(negocio.getUsuario());
-        if(aux != null && aux.getContrasena().compareTo(negocio.getContrasena()) == 0)
+        String sha256hex = Hashing.sha256()
+                            .hashString(negocio.getContrasena(), StandardCharsets.UTF_8)
+                            .toString();
+        if(aux != null && aux.getContrasena().compareTo(sha256hex) == 0)
             return(new ResponseEntity<>(aux,HttpStatus.OK));
         return(new ResponseEntity<>("Error en usuario o contrasena",HttpStatus.BAD_REQUEST));
     }
