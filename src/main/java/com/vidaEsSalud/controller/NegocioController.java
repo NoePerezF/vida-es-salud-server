@@ -40,11 +40,11 @@ public class NegocioController {
     }
     
     @PostMapping("/api/negocio/login")
-    public String login(@RequestBody Negocio negocio) throws JsonProcessingException{
+    public ResponseEntity<?> login(@RequestBody Negocio negocio) throws JsonProcessingException{
         Negocio aux = repo.findByUsuarioAndIsVerificadoTrue(negocio.getUsuario());
         if(aux != null && aux.getContrasena().compareTo(negocio.getContrasena()) == 0)
-            return(mapper.writeValueAsString(aux));
-        return("Error en usuario o contrasena");
+            return(new ResponseEntity<>(aux,HttpStatus.OK));
+        return(new ResponseEntity<>("Error en usuario o contrasena",HttpStatus.BAD_REQUEST));
     }
     
     @PostMapping("/api/negocio/addnegocio")
