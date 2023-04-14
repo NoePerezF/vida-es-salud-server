@@ -73,6 +73,7 @@ public class NegocioController {
         aux.getDireccion().setCalle(negocio.getDireccion().getCalle());
         aux.getDireccion().setNumero(negocio.getDireccion().getNumero());
         aux.getDireccion().setNumero_interio(negocio.getDireccion().getNumero_interio());
+        repoDireccion.save(aux.getDireccion());
         aux.setNombre(negocio.getNombre());
         aux.setHorario(negocio.getHorario());
         return(mapper.writeValueAsString(repo.save(aux)));
