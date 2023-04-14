@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import com.vidaEsSalud.domain.Citas;
+import com.vidaEsSalud.domain.Direccion;
 import com.vidaEsSalud.domain.Negocio;
+import com.vidaEsSalud.repository.DireccionRepository;
 import com.vidaEsSalud.repository.NegocioRepository;
 
 import java.nio.charset.StandardCharsets;
@@ -35,6 +37,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class NegocioController {
     @Autowired
     private NegocioRepository repo;
+
+    @Autowired
+    private DireccionRepository repoDireccion;
     
     private ObjectMapper mapper = new ObjectMapper();
     @GetMapping("/api/negocio/getnegocios")
@@ -62,7 +67,12 @@ public class NegocioController {
     @PostMapping("/api/negocio/updatenegocio")
     public String updateNegocio(@RequestBody Negocio negocio) throws JsonProcessingException{
         Negocio aux = repo.findById(negocio.getId()).get();
-        aux.setDireccion(negocio.getDireccion());
+        if(aux.getDireccion() == null) {
+            aux.setDireccion(new Direccion());
+        }
+        aux.getDireccion().setCalle(negocio.getDireccion().getCalle());
+        aux.getDireccion().setNumero(negocio.getDireccion().getNumero());
+        aux.getDireccion().setNumero_interio(negocio.getDireccion().getNumero_interio());
         aux.setNombre(negocio.getNombre());
         aux.setHorario(negocio.getHorario());
         return(mapper.writeValueAsString(repo.save(aux)));
