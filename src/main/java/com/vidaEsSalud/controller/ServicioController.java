@@ -61,9 +61,19 @@ public class ServicioController {
     }
     
     @PostMapping("/api/servicios/updateservicio")
-    public String updateProducto(@RequestBody Servicio servicio) throws JsonProcessingException{
-        Servicio aux = repoServicio.findById(servicio.getId()).get();
-        servicio.setNegocio(aux.getNegocio());
+    public String updateProducto(@RequestBody Negocio negocio) throws JsonProcessingException{
+        Negocio aux = repo.findById(negocio.getId()).get();
+        List<Servicio> servicios = aux.getServicios();
+        Servicio servicio = null;
+        for(Servicio s : servicios) {
+            if(s.getId() == negocio.getServicios().get(0).getId()){
+                servicio = s;
+            }
+        }
+        servicio.setDescripcion(negocio.getServicios().get(0).getDescripcion());
+        servicio.setNombre(negocio.getServicios().get(0).getNombre());
+        servicio.setPrecio(negocio.getServicios().get(0).getPrecio());
+        servicio.setHorario(negocio.getServicios().get(0).getHorario());
         return(mapper.writeValueAsString(repoServicio.save(servicio)));
         
     }
