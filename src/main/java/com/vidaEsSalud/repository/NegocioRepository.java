@@ -13,4 +13,6 @@ public interface NegocioRepository extends JpaRepository<Negocio, Integer>{
     Negocio findByUsuarioAndIsVerificadoTrue(String usuario);
     Optional<Negocio> findByVerificacion(String verificacion);
     Optional<Negocio> findByIdAndIsVerificadoTrue(int id);
+    Optional<Negocio> findByUsuario(String usuario);
+    Optional<Negocio> findByEmail(String email);
 }

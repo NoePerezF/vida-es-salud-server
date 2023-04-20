@@ -9,6 +9,8 @@ import com.vidaEsSalud.domain.Direccion;
 import com.vidaEsSalud.domain.Negocio;
 import com.vidaEsSalud.repository.DireccionRepository;
 import com.vidaEsSalud.repository.NegocioRepository;
+import com.vidaEsSalud.repository.ParametroRepository;
+import com.vidaEsSalud.service.MailServie;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -40,6 +43,12 @@ public class NegocioController {
 
     @Autowired
     private DireccionRepository repoDireccion;
+
+    @Autowired
+    private MailServie mailServie;
+
+    @Autowired
+    private ParametroRepository parametroRepository;
     
     private ObjectMapper mapper = new ObjectMapper();
     @GetMapping("/api/negocio/getnegocios")
@@ -59,9 +68,25 @@ public class NegocioController {
     }
     
     @PostMapping("/api/negocio/addnegocio")
-    public String addNegocio(@RequestBody Negocio negocio) throws JsonProcessingException{
-        
-        return(mapper.writeValueAsString(repo.save(negocio)));   
+    public ResponseEntity<?> addNegocio(@RequestBody Negocio negocio) throws JsonProcessingException{
+        if(repo.findByUsuario(negocio.getUsuario()).isPresent()){
+            return new ResponseEntity<>("Ya existe un usuario registrado con ese nombre de usuario",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if(repo.findByEmail(negocio.getEmail()).isPresent()){
+            return new ResponseEntity<>("Ya existe un usuario registrado con ese correo",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        String sha256hex = Hashing.sha256()
+                            .hashString(negocio.getContrasena(), StandardCharsets.UTF_8)
+                            .toString();
+                            negocio.setContrasena(sha256hex);
+                            negocio.setIsVerificado(true);
+        String verificacion = RandomStringUtils.randomAlphanumeric(64);
+        while(repo.findByVerificacion(verificacion).isPresent()){
+            verificacion = RandomStringUtils.randomAlphanumeric(64);
+        }
+        negocio.setVerificacion(verificacion);
+        mailServie.sendEmail("VES", negocio.getEmail(),"Verificacion email", "Enlace de verificacion: " + parametroRepository.findByClave("DOMAIN_NAME").getValor()+"/verificacion/"+verificacion, null);
+        return new ResponseEntity<Negocio>(repo.save(negocio), HttpStatus.OK);
     }
     
     @PostMapping("/api/negocio/updatenegocio")

@@ -12,4 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface ClienteRepository extends JpaRepository<Cliente, Integer>{
    Cliente findByUsuarioAndIsVerificadoTrue(String usuario);
    Optional<Cliente> findByVerificacion(String verificacion);
+   Optional<Cliente> findByUsuario(String usuario);
+   Optional<Cliente> findByEmail(String email);
+
 }

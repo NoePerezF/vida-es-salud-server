@@ -68,6 +68,7 @@ public class ServicioController {
         for(Servicio s : servicios) {
             if(s.getId() == negocio.getServicios().get(0).getId()){
                 servicio = s;
+                break;
             }
         }
         servicio.setDescripcion(negocio.getServicios().get(0).getDescripcion());

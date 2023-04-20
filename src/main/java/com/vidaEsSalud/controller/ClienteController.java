@@ -54,6 +54,12 @@ public class ClienteController {
     
     @PostMapping("/api/cliente/addcliente")
     public ResponseEntity<?> addCliente(@RequestBody Cliente cliente) throws JsonProcessingException{
+        if(repo.findByUsuario(cliente.getUsuario()).isPresent()){
+            return new ResponseEntity<>("Ya existe un usuario registrado con ese nombre de usuario",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        if(repo.findByEmail(cliente.getEmail()).isPresent()){
+            return new ResponseEntity<>("Ya existe un usuario registrado con ese correo",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         String sha256hex = Hashing.sha256()
                             .hashString(cliente.getContrasena(), StandardCharsets.UTF_8)
                             .toString();
